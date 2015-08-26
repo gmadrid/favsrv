@@ -1,11 +1,30 @@
 <!doctype html>
 <html>
 <head>
+  <link rel="stylesheet" href="/bootstrap/bootstrap.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <base href="/">
 </head>
 <body style="padding-top:70px" ng-app="fsApp">
-  <div class="container">
-    <ng-view>Loading</ng-view>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-4" style="background:gray"></div>
+      <div class="col-md-8" style="background:lightgray">
+	<div>
+	  <tabset>
+	    <tab heading="Image" active="true"></tab>
+	    <tab heading="Content"></tab>
+	  </tabset>
+	</div>
+	<div>
+	  <button>Save image</button>
+	  <button>Skip</button>
+	  <button>Unsave entry</button>
+	  <button>Search Tumblr</button>
+	  <button>Settings</button>
+	</div>
+      </div>
+    </div>
   </div>
 
   <script src="/static/js/bundle.js"></script>   

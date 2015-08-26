@@ -7,7 +7,7 @@
 	"angular-file-upload": "./assets/lib/angular-file-upload/angular-file-upload.js",
 	"angular-resource": "./assets/lib/angular-resource/angular-resource.js",
 	"angular-route": "./assets/lib/angular-route/angular-route.js",
-	"angular-ui-bootstrap": "./assets/lib/angular-ui-bootstrap-bower/ui-bootstrap.js",
-       	"angular-ui-bootstrap-tpls": "./assets/lib/angular-ui-bootstrap-bower/ui-bootstrap-tpls.js"
+	"angular-ui-bootstrap": "./assets/lib/angular-bootstrap/ui-bootstrap.js",
+       	"angular-ui-bootstrap-tpls": "./assets/lib/angular-bootstrap/ui-bootstrap-tpls.js"
     }
 }

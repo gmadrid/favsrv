@@ -9,11 +9,7 @@ module Site
   ) where
 
 ------------------------------------------------------------------------------
-import           Control.Applicative
 import           Data.ByteString (ByteString)
-import           Data.Monoid
-import qualified Data.Text as T
-import           Snap.Core
 import           Snap.Snaplet
 import           Snap.Snaplet.Auth
 import           Snap.Snaplet.Auth.Backends.JsonFile
@@ -27,6 +23,7 @@ import           Application
 -- | The application's routes.
 routes :: [(ByteString, Handler App App ())]
 routes = [ ("static", serveDirectory "static"),
+           ("bootstrap", serveDirectory "assets/lib/bootstrap-bower/css"),
            ("",       serveDirectory "static")
          ]
 
