@@ -21,19 +21,22 @@ import           Snap.Util.FileServe
 import           Application
 
 
-handleEntries :: MonadSnap m => m ()
-handleEntries = do
-  writeLBS $ encode [ "him" :: String, "her" ]
-  return ()
+handleEntries :: Handler App App ()
+handleEntries = writeLBS $ encode [ "him" :: String, "her" ]
 
 
 ------------------------------------------------------------------------------
 -- | The application's routes.
 routes :: [(ByteString, Handler App App ())]
 routes = [
+  -- REST handlers
   ("entry",     handleEntries),
+
+  -- HTML/CSS/JS
   ("static",    serveDirectory "static"),
+  -- Bootstrap CSS
   ("bootstrap", serveDirectory "assets/lib/bootstrap-bower/css"),
+  -- index.html
   ("",          serveDirectory "static")
          ]
 
