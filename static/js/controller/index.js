@@ -1,1 +1,5 @@
-var app = 'hi theree'
+var app = require('angular').module('fsApp');
+
+app.controller('EntryCtrl', require('./entrycontroller.js'));
+
+

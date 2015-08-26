@@ -9,7 +9,9 @@ module Site
   ) where
 
 ------------------------------------------------------------------------------
+import           Data.Aeson
 import           Data.ByteString (ByteString)
+import           Snap.Core
 import           Snap.Snaplet
 import           Snap.Snaplet.Auth
 import           Snap.Snaplet.Auth.Backends.JsonFile
@@ -19,12 +21,20 @@ import           Snap.Util.FileServe
 import           Application
 
 
+handleEntries :: MonadSnap m => m ()
+handleEntries = do
+  writeLBS $ encode [ "him" :: String, "her" ]
+  return ()
+
+
 ------------------------------------------------------------------------------
 -- | The application's routes.
 routes :: [(ByteString, Handler App App ())]
-routes = [ ("static", serveDirectory "static"),
-           ("bootstrap", serveDirectory "assets/lib/bootstrap-bower/css"),
-           ("",       serveDirectory "static")
+routes = [
+  ("entry",     handleEntries),
+  ("static",    serveDirectory "static"),
+  ("bootstrap", serveDirectory "assets/lib/bootstrap-bower/css"),
+  ("",          serveDirectory "static")
          ]
 
 

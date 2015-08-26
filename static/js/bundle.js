@@ -41105,10 +41105,29 @@ app.config(['$locationProvider', '$routeProvider', function($locationProvider, $
 require('./controller/index.js');
 require('./services/index.js');
 
-},{"./controller/index.js":8,"./services/index.js":9,"angular":5,"angular-resource":3,"angular-route":4,"angular-ui-bootstrap":2,"angular-ui-bootstrap-tpls":1}],8:[function(require,module,exports){
-var app = 'hi theree'
+},{"./controller/index.js":9,"./services/index.js":11,"angular":5,"angular-resource":3,"angular-route":4,"angular-ui-bootstrap":2,"angular-ui-bootstrap-tpls":1}],8:[function(require,module,exports){
+module.exports = ['$scope', 'Entries',
+		  function($scope, Entries) {
+		      $scope.entries = Entries.query(function() {
+			  console.log("Got a response");
+		      });
+		  }]
 
 },{}],9:[function(require,module,exports){
-var app = 'hi service'
+var app = require('angular').module('fsApp');
 
-},{}]},{},[7]);
+app.controller('EntryCtrl', require('./entrycontroller.js'));
+
+
+
+},{"./entrycontroller.js":8,"angular":5}],10:[function(require,module,exports){
+module.exports = ['$resource', function($resource) { 
+    return $resource('/entry');
+}];
+
+},{}],11:[function(require,module,exports){
+var app = require('angular').module('fsApp');
+
+app.factory('Entries', require('./entries.js'));
+
+},{"./entries.js":10,"angular":5}]},{},[7]);

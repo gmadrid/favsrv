@@ -5,28 +5,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <base href="/">
 </head>
-<body style="padding-top:70px" ng-app="fsApp">
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col-md-4" style="background:gray"></div>
-      <div class="col-md-8" style="background:lightgray">
-	<div>
-	  <tabset>
-	    <tab heading="Image" active="true"></tab>
-	    <tab heading="Content"></tab>
-	  </tabset>
-	</div>
-	<div>
-	  <button>Save image</button>
-	  <button>Skip</button>
-	  <button>Unsave entry</button>
-	  <button>Search Tumblr</button>
-	  <button>Settings</button>
-	</div>
-      </div>
+<body ng-app="fsApp" style="display:flex;flex-flow:row nowrap;height:100vh">
+  <div style="flex:0 1 auto;height:100%;min-width:200px" ng-controller="EntryCtrl">
+    <table>
+      <tr ng-repeat="entry in entries track by $index">
+	<td>{{entry}}</td>
+      </tr>
+    </table>
+  </div>
+  <div style="flex:1;display:flex;flex-flow:column nowrap">
+    <div style="flex:2">
+
+    </div>
+    <div style="flex:0 0 auto;display:flex;justify-content:center">
+      <button>Save image</button>
+      <button>Skip</button>
+      <button>Unsave entry</button>
+      <button>Search Tumblr</button>
+      <button>Settings</button>
     </div>
   </div>
-
   <script src="/static/js/bundle.js"></script>   
 </body>
 </html>
