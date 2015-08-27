@@ -5,7 +5,6 @@ module.exports = ['$scope', 'Entries',
 
 		      $scope.selectEntry = function(e) {
 			  $scope.selectedEntry = e;
-			  console.log(e);
 		      };
 		      
 		      Entries.query(function(data) {
