@@ -41798,13 +41798,25 @@ require('./services/index.js');
 },{"./controller/index.js":10,"./services/index.js":12,"angular":6,"angular-resource":3,"angular-route":4,"angular-sanitize":5,"angular-ui-bootstrap":2,"angular-ui-bootstrap-tpls":1}],9:[function(require,module,exports){
 module.exports = ['$scope', 'Entries',
 		  function($scope, Entries) {
+		      var bigRE = /_\d+\.([^.]+)$/
+		      function bigUrl(e) {
+			  return e.imageUrl.replace(bigRE, "_1280.$1");
+		      }
+
+		      function thumbUrl(e) {
+			  return e.imageUrl.replace(bigRE, "_100.$1");
+		      }
+
 		      $scope.selectedEntry = null;
 		      $scope.entries = null;
 
 		      $scope.selectEntry = function(e) {
 			  $scope.selectedEntry = e;
 		      };
-		      
+
+		      $scope.thumbUrl = thumbUrl;
+		      $scope.bigUrl = bigUrl;
+
 		      Entries.query(function(data) {
 			  $scope.entries = data;
 			  if (data.length > 0) {

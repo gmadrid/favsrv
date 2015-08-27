@@ -12,7 +12,7 @@
 	<td ng-style="(entry == selectedEntry) ? {'background':'blue'} : {}"
 	    ng-click="selectEntry(entry)">
 	  <div style="display:inline-block;height:40px;width:40px">
-	    <img style="margin:auto;display:block;max-width:100%;max-height:100%" ng-src="{{entry.imageUrl}}">
+	    <img style="margin:auto;display:block;max-width:100%;max-height:100%" ng-src="{{thumbUrl(entry)}}">
 	  </div>
 	  <a ng-bind="entry.title" style="vertical-align:middle"></a>
 	</td>
@@ -23,7 +23,7 @@
     <tabset>
       <tab heading="Image">
 	<div style="flex:2">
-	  <img ng-src="{{selectedEntry.imageUrl}}">
+	  <img ng-src="{{bigUrl(selectedEntry)}}">
 	</div>
       </tab>
       <tab heading="Content">
