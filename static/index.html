@@ -18,9 +18,17 @@
     </table>
   </div>
   <div style="flex:1;display:flex;flex-flow:column nowrap">
-    <div style="flex:2">
-      <img ng-src="{{selectedEntry.imageUrl}}">
-    </div>
+    <tabset>
+      <tab heading="Image">
+	<div style="flex:2">
+	  <img ng-src="{{selectedEntry.imageUrl}}">
+	</div>
+      </tab>
+      <tab heading="Content">
+	<div style="flex:2" ng-bind-html="selectedEntry.content">
+	</div>
+      </tab>
+    </tabset>
     <div style="flex:0 0 auto;display:flex;justify-content:center">
       <button>Save image</button>
       <button>Skip</button>

@@ -4,7 +4,8 @@ module.exports = ['$scope', 'Entries',
 		      $scope.entries = null;
 
 		      $scope.selectEntry = function(e) {
-			  $scope.selectedEntry = e
+			  $scope.selectedEntry = e;
+			  console.log(e);
 		      };
 		      
 		      Entries.query(function(data) {

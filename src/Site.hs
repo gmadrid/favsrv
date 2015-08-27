@@ -20,6 +20,7 @@ import Data.ByteString (ByteString)
 import Data.Configurator
 import Data.Default
 import Data.Foldable
+import Data.Scientific
 import Data.String
 import Data.Text (Text, breakOn, isPrefixOf, stripPrefix, takeWhile)
 import Debug.Trace
@@ -91,7 +92,8 @@ data EntryResponse = EntryResponse {
   visualUrl :: Maybe Text,
   categories :: [Text],
   content :: Maybe Text,
-  title :: Maybe Text
+  title :: Maybe Text,
+  published :: Maybe Integer
 } deriving (Show, Eq)
 
 instance FromJSON EntryResponse where
@@ -114,6 +116,7 @@ instance FromJSON EntryResponse where
                                           Just a -> a .:? "content"
                                           Nothing -> return Nothing))
                          <*> (o .: "title")
+                         <*> (o .: "published")
   parseJSON _ = mzero
 
 instance ToJSON EntryResponse where
