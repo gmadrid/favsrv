@@ -41108,8 +41108,18 @@ require('./services/index.js');
 },{"./controller/index.js":9,"./services/index.js":11,"angular":5,"angular-resource":3,"angular-route":4,"angular-ui-bootstrap":2,"angular-ui-bootstrap-tpls":1}],8:[function(require,module,exports){
 module.exports = ['$scope', 'Entries',
 		  function($scope, Entries) {
-		      $scope.entries = Entries.query(function() {
-			  console.log("Got a response");
+		      $scope.selectedEntry = null;
+		      $scope.entries = null;
+
+		      $scope.selectEntry = function(e) {
+			  $scope.selectedEntry = e
+		      };
+		      
+		      Entries.query(function(data) {
+			  $scope.entries = data;
+			  if (data.length > 0) {
+			      $scope.selectedEntry = data[0];
+			  }
 		      });
 		  }]
 
@@ -41117,6 +41127,7 @@ module.exports = ['$scope', 'Entries',
 var app = require('angular').module('fsApp');
 
 app.controller('EntryCtrl', require('./entrycontroller.js'));
+
 
 
 

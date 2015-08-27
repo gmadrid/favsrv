@@ -1,3 +1,4 @@
+{-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE TemplateHaskell #-}
 
 ------------------------------------------------------------------------------
@@ -7,16 +8,22 @@ module Application where
 
 ------------------------------------------------------------------------------
 import Control.Lens
+import Data.ByteString
 import Snap.Snaplet
---import Snap.Snaplet.Heist
 import Snap.Snaplet.Auth
 import Snap.Snaplet.Session
 
 ------------------------------------------------------------------------------
-data App = App
-    { _sess :: Snaplet SessionManager
-    , _auth :: Snaplet (AuthManager App)
-    }
+data FeedlyConfig = FeedlyConfig {
+  fcAccessToken :: ByteString,
+  fcUserId      :: ByteString
+  }
+
+data App = App {
+  _sess   :: Snaplet SessionManager,
+  _auth   :: Snaplet (AuthManager App),
+  _feedly :: FeedlyConfig
+  }
 
 makeLenses ''App
 

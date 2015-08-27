@@ -25,7 +25,15 @@ Executable favsrv
   Build-depends:
     aeson,
     bytestring                >= 0.9.1   && < 0.11,
-    heist                     >= 0.14    && < 0.15,
+    configurator,
+                data-default,
+                exceptions,
+                failure,
+                heist                     >= 0.14    && < 0.15,
+                hoauth2,
+                http-client,
+                http-conduit,
+                http-types,
     MonadCatchIO-transformers >= 0.2.1   && < 0.4,
     mtl                       >= 2       && < 3,
     snap                      >= 0.13    && < 0.15,
@@ -34,7 +42,8 @@ Executable favsrv
     snap-loader-static        >= 0.9     && < 0.10,
     text                      >= 0.11    && < 1.3,
     time                      >= 1.1     && < 1.6,
-    xmlhtml                   >= 0.1     && < 0.3
+                xmlhtml                   >= 0.1     && < 0.3,
+                unordered-containers
 
   if flag(old-base)
     build-depends:

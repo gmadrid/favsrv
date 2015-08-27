@@ -1,6 +1,16 @@
 module.exports = ['$scope', 'Entries',
 		  function($scope, Entries) {
-		      $scope.entries = Entries.query(function() {
-			  console.log("Got a response");
+		      $scope.selectedEntry = null;
+		      $scope.entries = null;
+
+		      $scope.selectEntry = function(e) {
+			  $scope.selectedEntry = e
+		      };
+		      
+		      Entries.query(function(data) {
+			  $scope.entries = data;
+			  if (data.length > 0) {
+			      $scope.selectedEntry = data[0];
+			  }
 		      });
 		  }]

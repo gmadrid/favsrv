@@ -5,17 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <base href="/">
 </head>
-<body ng-app="fsApp" style="display:flex;flex-flow:row nowrap;height:100vh">
-  <div style="flex:0 1 auto;height:100%;min-width:200px" ng-controller="EntryCtrl">
+<body ng-app="fsApp" style="display:flex;flex-flow:row nowrap;height:100vh" ng-controller="EntryCtrl">
+  <div style="flex:0 1 auto;height:100%;min-width:200px;overflow:scroll">
     <table>
-      <tr ng-repeat="entry in entries track by $index">
-	<td>{{entry}}</td>
+      <tr ng-repeat="entry in entries track by $index"
+	  ng-click="console.log('foo')">
+	<td ng-style="(entry == selectedEntry) ? {'background':'blue'} : {}"
+	    ng-click="selectEntry(entry)">
+	  <a ng-bind="entry.title"></a>
+	</td>
       </tr>
     </table>
   </div>
   <div style="flex:1;display:flex;flex-flow:column nowrap">
     <div style="flex:2">
-
+      <img ng-src="{{selectedEntry.imageUrl}}">
     </div>
     <div style="flex:0 0 auto;display:flex;justify-content:center">
       <button>Save image</button>
