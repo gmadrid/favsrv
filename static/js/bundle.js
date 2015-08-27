@@ -41816,7 +41816,7 @@ module.exports = ['$scope', 'Entries',
 },{}],10:[function(require,module,exports){
 var app = require('angular').module('fsApp');
 
-app.controller('EntryCtrl', require('./entrycontroller.js'));
+app.controller('EntryController', require('./entrycontroller.js'));
 
 
 
