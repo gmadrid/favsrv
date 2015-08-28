@@ -48,6 +48,9 @@ import Application
 baseUri = "http://cloud.feedly.com" :: ByteString
 streamIdsPath = "/v3/streams/ids"
 entriesPath = "/v3/entries/.mget"
+markersPath = "/v3/markers"
+
+destDir = "/Users/gmadrid/Dropbox/Media/Porn/Inbox"
 
 saveUrl :: Handler App App ()
 saveUrl = do
@@ -57,7 +60,6 @@ saveUrl = do
     (return $ writeLBS "OK")
     e
 
-destDir = "/Users/gmadrid/Dropbox/Media/Porn/Inbox"
 
 saveUrlM :: ExceptT L.ByteString (Handler App App) ()
 saveUrlM = do
@@ -72,22 +74,54 @@ saveUrlM = do
 
 
 
+unsaveEntry :: Handler App App ()
+unsaveEntry = do
+  e <- runExceptT unsaveEntryM
+  either (\l -> do
+             modifyResponse $ setResponseStatus 500 (L.toStrict l))
+    (return $ writeLBS "OK")
+    e
 
 
+unsaveEntryM :: ExceptT L.ByteString (Handler App App) ()
+unsaveEntryM = do
+  rsp <- lift getResponse
+  mParam <- lift $ getParam "entryId"
+  entryId <- maybe (throwError "Missing entryId param") return mParam
+  let (uri, postData) = markersUriAndPostData [entryId]
+  ireq <- liftIO $ parseUrl $ C8.unpack uri
+  f <- gets _feedly
+  let token = AccessToken (fcAccessToken f) Nothing Nothing Nothing
+  let req' = (updateRequestHeaders (Just token) ireq) {
+        Client.method = "POST",
+        requestBody = RequestBodyLBS postData }
+  mgr <- liftIO $ newManager defaultManagerSettings
+  irsp <- liftIO $ authRequest' req' id mgr
+  if not $ statusIsSuccessful $ responseStatus irsp
+    then throwError (fromString $ ("Failed to unsave with status: " ++
+                                   (show $ responseStatus irsp)))
+    else return ()
 
--- unsaveEntry :: Manager -> AccessToken -> EntryResponse -> ProcessM ()
--- unsaveEntry mgr token e = do
---   let (uri, postData) = markersUriAndPostData [e]
---   let body = RequestBodyLBS postData
---   req <- parseUrlBS uri
---   let req' = (updateRequestHeaders (Just token) req) {
---         method = "POST",
---         requestBody = body }
---   rsp <- liftIO $ authRequest' req' id mgr
---   if not $ statusIsSuccessful $ responseStatus rsp
---     then throwError (fromString $ ("Failed to unsave with status: " ++
---                                    (show $ responseStatus rsp)))
---     else return ()
+
+markersUriAndPostData :: [ByteString] -> (ByteString, L.ByteString)
+markersUriAndPostData entryIds = (uri, postData)
+  where uri = baseUri `mappend` markersPath
+        postData = encode (MarkersPostData
+                           "markAsUnsaved"
+                           "entries"
+                           (fmap C8.unpack entryIds))
+
+data MarkersPostData = MarkersPostData {
+  action :: Text,
+  typeField :: Text,
+  entryIds :: [ String ]
+  } deriving (Show, Eq)
+
+instance ToJSON MarkersPostData where
+  toJSON (MarkersPostData action typeField entryIds) =
+    object [ "action" .= action,
+             "type" .= typeField,
+             "entryIds" .= entryIds ]
 
 
 handleEntries :: Handler App App ()
@@ -147,14 +181,14 @@ instance FromJSON EntryResponse where
                               >>= (\a -> case a of       -- visualUrl
                                           Just a -> a .:? "url"
                                           Nothing -> return Nothing))
-                         
+
                          <*> return []
                          -- <*> ((o .:? "categories")
                          --      >>= (\a -> case a of       -- categories
                          --                  Just (Array arr) ->
                          --                    return $ grabField "label" arr
                          --                  Nothing -> mzero))
-                         
+
                          <*> ((o .:? "summary")
                               >>= (\a -> case a of       -- content
                                           Just a -> a .:? "content"
@@ -180,7 +214,7 @@ grabField label arr = foldl' (\acc v -> case v of
                                              else acc
                                _ -> acc)
                       [] arr
-                      
+
 entryBestUrl :: (Text -> Text) -> EntryResponse -> Maybe Text
 entryBestUrl f e = let raw = maybe contentUrl useVisualUrl vu
                          where vu = do
@@ -199,7 +233,7 @@ getContentUrl e = do
   let (_, rest) = breakOn prefix c
   u <- stripPrefix prefix rest
   return $ Data.Text.takeWhile (/= '"') u
-  
+
 getIds :: Manager -> AccessToken -> ByteString -> Int -> IO (Either L.ByteString [Text])
 getIds mgr token uid num =
   return . either Left (Right . ids) =<< authGetJSON mgr token (savedIdsUri uid num)
@@ -235,6 +269,7 @@ routes = [
 
   -- Other handlers
   ("saveUrl",   saveUrl),
+  ("unsaveEntry", unsaveEntry),
 
   -- HTML/CSS/JS
   ("static",    serveDirectory "static"),
@@ -249,7 +284,7 @@ routes = [
 -- | The application initializer.
 app :: SnapletInit App App
 app = makeSnaplet "app" "An snaplet example application." Nothing $ do
-  
+
   s <- nestSnaplet "sess" sess $
        initCookieSessionManager "site_key.txt" "sess" (Just 3600)
 
@@ -264,4 +299,3 @@ app = makeSnaplet "app" "An snaplet example application." Nothing $ do
   accessToken <- liftIO $ require conf "favsrv.accessToken"
   userId <- liftIO $ require conf "favsrv.userId"
   return $ App s a (FeedlyConfig accessToken userId)
-

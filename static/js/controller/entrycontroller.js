@@ -27,6 +27,24 @@ module.exports = ['$http', '$scope', 'Entries',
 			  console.log("save");
 		      }
 
+		      function unsaveEntry(e) {
+			  $http({
+			      method: "POST",
+			      url: "/unsaveEntry",
+			      transformRequest: function(obj) {
+				  var str = [];
+				  for(var p in obj)
+				      str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+				  return str.join("&");
+			      },
+			      data: { entryId: e.entryId },
+			      headers: {
+				  'Content-Type': 'application/x-www-form-urlencoded'
+			      }
+			  });
+			  console.log("unsave");
+		      }
+
 		      $scope.selectedEntry = null;
 		      $scope.entries = null;
 
@@ -37,6 +55,7 @@ module.exports = ['$http', '$scope', 'Entries',
 		      $scope.thumbUrl = thumbUrl;
 		      $scope.bigUrl = bigUrl;
 		      $scope.saveEntry = saveEntry;
+		      $scope.unsaveEntry = unsaveEntry;
 
 		      Entries.query(function(data) {
 			  $scope.entries = data;

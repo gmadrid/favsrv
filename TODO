@@ -1,10 +1,9 @@
-- client-side embiggen
-- make thumbs use small images
 - buttons
-  - save
   - skip
-  - unsave
+  - unsave should remove from list
   - search tumblr
+- get more entries
+- Deal with your monad stack.
 - biggest/orig picker
 - Scroll with arrows
 - Key everything on entry id ?
