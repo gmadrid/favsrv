@@ -41796,15 +41796,33 @@ require('./controller/index.js');
 require('./services/index.js');
 
 },{"./controller/index.js":10,"./services/index.js":12,"angular":6,"angular-resource":3,"angular-route":4,"angular-sanitize":5,"angular-ui-bootstrap":2,"angular-ui-bootstrap-tpls":1}],9:[function(require,module,exports){
-module.exports = ['$scope', 'Entries',
-		  function($scope, Entries) {
+module.exports = ['$http', '$scope', 'Entries',
+		  function($http, $scope, Entries) {
 		      var bigRE = /_\d+\.([^.]+)$/
 		      function bigUrl(e) {
-			  return e.imageUrl.replace(bigRE, "_1280.$1");
+			  return e && e.imageUrl.replace(bigRE, "_1280.$1");
 		      }
 
 		      function thumbUrl(e) {
-			  return e.imageUrl.replace(bigRE, "_100.$1");
+			  return e && e.imageUrl.replace(bigRE, "_100.$1");
+		      }
+
+		      function saveEntry(e) {
+			  $http({
+			      method: "POST",
+			      url: "/saveUrl",
+			      transformRequest: function(obj) {
+				  var str = [];
+				  for(var p in obj)
+				      str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+				  return str.join("&");
+			      },
+			      data: { url: bigUrl(e) },
+			      headers: {
+				  'Content-Type': 'application/x-www-form-urlencoded'
+			      }
+			  });
+			  console.log("save");
 		      }
 
 		      $scope.selectedEntry = null;
@@ -41816,6 +41834,7 @@ module.exports = ['$scope', 'Entries',
 
 		      $scope.thumbUrl = thumbUrl;
 		      $scope.bigUrl = bigUrl;
+		      $scope.saveEntry = saveEntry;
 
 		      Entries.query(function(data) {
 			  $scope.entries = data;

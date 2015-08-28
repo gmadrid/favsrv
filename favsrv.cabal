@@ -29,6 +29,7 @@ Executable favsrv
                 data-default,
                 exceptions,
                 failure,
+                filepath,
                 heist                     >= 0.14    && < 0.15,
                 hoauth2,
                 http-client,

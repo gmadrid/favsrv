@@ -24,7 +24,7 @@ import Data.Scientific
 import Data.String
 import Data.Text (Text, breakOn, isPrefixOf, stripPrefix, takeWhile)
 import Debug.Trace
-import Network.HTTP.Client hiding(method)
+import Network.HTTP.Client hiding(method, withResponse)
 import Network.HTTP.Types hiding(GET)
 import Network.OAuth.OAuth2
 import Snap.Core
@@ -33,7 +33,10 @@ import Snap.Snaplet.Auth
 import Snap.Snaplet.Auth.Backends.JsonFile
 import Snap.Snaplet.Session.Backends.CookieSession
 import Snap.Util.FileServe
+import System.FilePath
+import System.IO (withFile, IOMode(WriteMode))
 
+import qualified Data.ByteString as BS
 import qualified Data.ByteString.Char8 as C8
 import qualified Data.ByteString.Lazy as L
 import qualified Data.HashMap.Strict as HashMap
@@ -45,6 +48,47 @@ import Application
 baseUri = "http://cloud.feedly.com" :: ByteString
 streamIdsPath = "/v3/streams/ids"
 entriesPath = "/v3/entries/.mget"
+
+saveUrl :: Handler App App ()
+saveUrl = do
+  e <- runExceptT saveUrlM
+  either (\l -> do
+             modifyResponse $ setResponseStatus 500 (L.toStrict l))
+    (return $ writeLBS "OK")
+    e
+
+destDir = "/Users/gmadrid/Dropbox/Media/Porn/Inbox"
+
+saveUrlM :: ExceptT L.ByteString (Handler App App) ()
+saveUrlM = do
+  rsp <- lift getResponse
+  mParam <- lift $ getParam "url"
+  url <- maybe (throwError "Missing URL param") return mParam
+  let fn = destDir </> (takeFileName $ C8.unpack url)
+  ireq <- liftIO $ parseUrl $ C8.unpack url
+  mgr <- liftIO $ newManager defaultManagerSettings
+  irsp <- liftIO $ httpLbs ireq mgr
+  liftIO $ withFile fn WriteMode $ flip L.hPut (responseBody irsp)
+
+
+
+
+
+
+-- unsaveEntry :: Manager -> AccessToken -> EntryResponse -> ProcessM ()
+-- unsaveEntry mgr token e = do
+--   let (uri, postData) = markersUriAndPostData [e]
+--   let body = RequestBodyLBS postData
+--   req <- parseUrlBS uri
+--   let req' = (updateRequestHeaders (Just token) req) {
+--         method = "POST",
+--         requestBody = body }
+--   rsp <- liftIO $ authRequest' req' id mgr
+--   if not $ statusIsSuccessful $ responseStatus rsp
+--     then throwError (fromString $ ("Failed to unsave with status: " ++
+--                                    (show $ responseStatus rsp)))
+--     else return ()
+
 
 handleEntries :: Handler App App ()
 handleEntries = method GET getter
@@ -188,6 +232,9 @@ routes :: [(ByteString, Handler App App ())]
 routes = [
   -- REST handlers
   ("entry",     handleEntries),
+
+  -- Other handlers
+  ("saveUrl",   saveUrl),
 
   -- HTML/CSS/JS
   ("static",    serveDirectory "static"),
