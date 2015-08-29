@@ -2,10 +2,12 @@ module.exports = ['$http', '$scope', 'Entries',
 		  function($http, $scope, Entries) {
 		      var bigRE = /_\d+\.([^.]+)$/
 		      function bigUrl(e) {
+//			  return "http://7-themes.com/data_images/out/69/7009683-innocent-puppy-eyes.jpg"
 			  return e && e.imageUrl.replace(bigRE, "_1280.$1");
 		      }
 
 		      function thumbUrl(e) {
+//			  return "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSkxdNK4qaUDQ_b8IoEgJs17XNtRPVgB3UdcNmo2y3Sjv1SKgMReNGHAQ"
 			  return e && e.imageUrl.replace(bigRE, "_100.$1");
 		      }
 
@@ -45,17 +47,21 @@ module.exports = ['$http', '$scope', 'Entries',
 			  console.log("unsave");
 		      }
 
+		      function selectEntry(e) {
+			  $scope.selectedEntry = e;
+		      }
+
+		      // Instance vars
 		      $scope.selectedEntry = null;
 		      $scope.entries = null;
 
-		      $scope.selectEntry = function(e) {
-			  $scope.selectedEntry = e;
-		      };
-
+		      // Methods
+		      $scope.selectEntry = selectEntry;
 		      $scope.thumbUrl = thumbUrl;
 		      $scope.bigUrl = bigUrl;
 		      $scope.saveEntry = saveEntry;
 		      $scope.unsaveEntry = unsaveEntry;
+		      
 
 		      Entries.query(function(data) {
 			  $scope.entries = data;

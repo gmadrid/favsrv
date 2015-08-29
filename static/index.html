@@ -2,33 +2,60 @@
 <html>
 <head>
   <link rel="stylesheet" href="/bootstrap/bootstrap.css">
+  <style>
+    body { display: flex; flex-flow: row nowrap; height: 100vh;  }
+    body > div { display: flex; flex-flow: column nowrap; height: 100% }
+
+    #left-pane { flex: 0 1 auto; min-width: 200px }
+    #left-pane > ul { flex: 0 1 auto; list-style: none inside;
+                      margin: 0; padding: 0; overflow: scroll }
+    #left-pane > div { flex: 0 0 auto }
+    #left-pane li > img { width:60px; height:50px; object-fit:scale-down }
+
+    #right-pane { flex:1; overflow:hidden; position:relative }
+    #right-pane > .ng-isolate-scope { display:flex; flex:1 0 auto; flex-flow: column nowrap }
+    #right-pane > .ng-isolate-scope > ul { flex:0 0 auto }
+    #right-pane > .ng-isolate-scope > div { flex:1 0 auto }
+    #right-pane .tab-content { position:relative }
+    #right-pane .tab-content > div { position:absolute; top:0; bottom:0; left:0; right:0 }
+    #right-pane .full-image { position:absolute; top:0; bottom:0; left:0; right:0 }
+    #right-pane .full-image img { max-height:100%; max-width:100% }
+
+    .fill-parent { position:absolute; top:0; bottom:0; left:0; right:0 }
+    .scroll { overflow: scroll }
+
+  </style>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <base href="/">
 </head>
-<body ng-app="fsApp" style="display:flex;flex-flow:row nowrap;height:100vh" ng-controller="EntryController">
-  <div style="flex:0 1 auto;height:100%;min-width:200px;overflow:scroll">
-    <table>
-      <tr ng-repeat="entry in entries track by $index">
-	<td ng-style="(entry == selectedEntry) ? {'background':'blue'} : {}"
-	    ng-click="selectEntry(entry)">
-	  <div style="display:inline-block;height:40px;width:40px">
-	    <img style="margin:auto;display:block;max-width:100%;max-height:100%" ng-src="{{thumbUrl(entry)}}">
-	  </div>
-	  <a ng-bind="entry.title" style="vertical-align:middle"></a>
-	</td>
-      </tr>
-    </table>
+<body ng-app="fsApp" ng-controller="EntryController">
+  <div id="left-pane">
+    <div>
+      <input type="checkbox"/>"Media"
+      <input type="checkbox"/>Tumblr
+      <input type="checkbox"/>Crawling
+    </div>
+    <ul>
+      <li ng-click="selectEntry(entry)"
+	  ng-repeat="entry in entries track by $index"
+	  ng-style="(entry == selectedEntry) ? {background:'blue'} : {}">
+	<img ng-src="{{thumbUrl(entry)}}">
+	<a ng-bind="entry.title"></a>
+      </li>
+    </ul>
+    <div>
+      <button class="btn">Refresh</button>
+    </div>
   </div>
-  <div style="flex:1;display:flex;flex-flow:column nowrap">
+  <div id="right-pane">
     <tabset>
       <tab heading="Image">
-	<div style="flex:2">
+	<div class="full-image">
 	  <img ng-src="{{bigUrl(selectedEntry)}}">
 	</div>
       </tab>
       <tab heading="Content">
-	<div style="flex:2" ng-bind-html="selectedEntry.content">
-	</div>
+	<div class="fill-parent scroll" ng-bind-html="selectedEntry.content"></div>
       </tab>
     </tabset>
     <div style="flex:0 0 auto;display:flex;justify-content:center">
@@ -39,6 +66,6 @@
       <button class="btn">Settings</button>
     </div>
   </div>
-  <script src="/static/js/bundle.js"></script>   
+  <script src="/static/js/bundle.js"></script>
 </body>
 </html>
