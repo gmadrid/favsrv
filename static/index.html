@@ -36,9 +36,9 @@
       <input type="checkbox"/>Crawling
     </div>
     <ul>
-      <li ng-click="selectEntry(entry)"
+      <li ng-click="selectIndex($index)"
 	  ng-repeat="entry in entries track by $index"
-	  ng-style="(entry == selectedEntry) ? {background:'blue'} : {}">
+	  ng-style="($index === selectedIndex()) ? {background:'blue'} : {}">
 	<img ng-src="{{thumbUrl(entry)}}">
 	<a ng-bind="entry.title"></a>
       </li>
@@ -51,17 +51,17 @@
     <tabset>
       <tab heading="Image">
 	<div class="full-image">
-	  <img ng-src="{{bigUrl(selectedEntry)}}">
+	  <img ng-src="{{bigUrl(selectedEntry())}}">
 	</div>
       </tab>
       <tab heading="Content">
-	<div class="fill-parent scroll" ng-bind-html="selectedEntry.content"></div>
+	<div class="fill-parent scroll" ng-bind-html="selectedEntry().content"></div>
       </tab>
     </tabset>
     <div style="flex:0 0 auto;display:flex;justify-content:center">
-      <button ng-click="saveEntry(selectedEntry)" class="btn">Save image</button>
+      <button ng-click="saveEntry(selectedEntry())" class="btn">Save image</button>
       <button class="btn">Skip</button>
-      <button ng-click="unsaveEntry(selectedEntry)" class="btn">Unsave entry</button>
+      <button ng-click="unsaveEntry(selectedEntry())" class="btn">Unsave entry</button>
       <button class="btn">Search Tumblr</button>
       <button class="btn">Settings</button>
     </div>

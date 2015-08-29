@@ -41800,12 +41800,12 @@ module.exports = ['$http', '$scope', 'Entries',
 		  function($http, $scope, Entries) {
 		      var bigRE = /_\d+\.([^.]+)$/
 		      function bigUrl(e) {
-//			  return "http://7-themes.com/data_images/out/69/7009683-innocent-puppy-eyes.jpg"
+// return "http://7-themes.com/data_images/out/69/7009683-innocent-puppy-eyes.jpg"
 			  return e && e.imageUrl.replace(bigRE, "_1280.$1");
 		      }
 
 		      function thumbUrl(e) {
-//			  return "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSkxdNK4qaUDQ_b8IoEgJs17XNtRPVgB3UdcNmo2y3Sjv1SKgMReNGHAQ"
+// return "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSkxdNK4qaUDQ_b8IoEgJs17XNtRPVgB3UdcNmo2y3Sjv1SKgMReNGHAQ"
 			  return e && e.imageUrl.replace(bigRE, "_100.$1");
 		      }
 
@@ -41816,7 +41816,8 @@ module.exports = ['$http', '$scope', 'Entries',
 			      transformRequest: function(obj) {
 				  var str = [];
 				  for(var p in obj)
-				      str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+				      str.push(encodeURIComponent(p) + "=" +
+					       encodeURIComponent(obj[p]));
 				  return str.join("&");
 			      },
 			      data: { url: bigUrl(e) },
@@ -41834,7 +41835,8 @@ module.exports = ['$http', '$scope', 'Entries',
 			      transformRequest: function(obj) {
 				  var str = [];
 				  for(var p in obj)
-				      str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+				      str.push(encodeURIComponent(p) + "=" +
+					       encodeURIComponent(obj[p]));
 				  return str.join("&");
 			      },
 			      data: { entryId: e.entryId },
@@ -41845,26 +41847,36 @@ module.exports = ['$http', '$scope', 'Entries',
 			  console.log("unsave");
 		      }
 
-		      function selectEntry(e) {
-			  $scope.selectedEntry = e;
+		      function selectIndex(i) {
+			  $scope.selectedIndex_ = i;
+		      }
+
+		      function selectedIndex() {
+			  return $scope.selectedIndex_;
+		      }
+
+		      function selectedEntry() {
+			  return $scope.entries[selectedIndex()];
 		      }
 
 		      function refresh() {
 			  $scope.entries = [];
 			  Entries.query(function(data) {
 			      $scope.entries = data;
-			      if (data.length > 0) {
-				  $scope.selectedEntry = data[0];
+			      if (data.length <= $scope.selectedIndex_) {
+				  $scope.selectIndex(data.length - 1);
 			      }
 			  });
 		      }
 
 		      // Instance vars
-		      $scope.selectedEntry = null;
+		      $scope.selectedIndex_ = 0;
 		      $scope.entries = null;
 
 		      // Methods
-		      $scope.selectEntry = selectEntry;
+		      $scope.selectIndex = selectIndex;
+		      $scope.selectedIndex = selectedIndex;
+		      $scope.selectedEntry = selectedEntry;
 		      $scope.thumbUrl = thumbUrl;
 		      $scope.bigUrl = bigUrl;
 		      $scope.saveEntry = saveEntry;
