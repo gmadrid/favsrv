@@ -51,6 +51,16 @@ module.exports = ['$http', '$scope', 'Entries',
 			  $scope.selectedEntry = e;
 		      }
 
+		      function refresh() {
+			  $scope.entries = [];
+			  Entries.query(function(data) {
+			      $scope.entries = data;
+			      if (data.length > 0) {
+				  $scope.selectedEntry = data[0];
+			      }
+			  });
+		      }
+
 		      // Instance vars
 		      $scope.selectedEntry = null;
 		      $scope.entries = null;
@@ -61,12 +71,7 @@ module.exports = ['$http', '$scope', 'Entries',
 		      $scope.bigUrl = bigUrl;
 		      $scope.saveEntry = saveEntry;
 		      $scope.unsaveEntry = unsaveEntry;
+		      $scope.refresh = refresh;
 		      
-
-		      Entries.query(function(data) {
-			  $scope.entries = data;
-			  if (data.length > 0) {
-			      $scope.selectedEntry = data[0];
-			  }
-		      });
+		      refresh();
 		  }]
