@@ -10,7 +10,10 @@
     #left-pane > ul { flex: 0 1 auto; list-style: none inside;
                       margin: 0; padding: 0; overflow: scroll }
     #left-pane > div { flex: 0 0 auto }
-    #left-pane li > img { width:60px; height:50px; object-fit:scale-down }
+    #left-pane li { display: flex; align-items: center }
+
+    #left-pane li > img { width:60px; height:50px; object-fit:scale-down; flex: 0 0 auto }
+    #left-pane li > div { flex: 1 1 auto; padding: 5px }
 
     #right-pane { flex:1; overflow:hidden; position:relative }
     #right-pane > .ng-isolate-scope { display:flex; flex:1 0 auto; flex-flow: column nowrap }
@@ -22,6 +25,7 @@
     #right-pane .full-image img { max-height:100%; max-width:100% }
 
     .fill-parent { position:absolute; top:0; bottom:0; left:0; right:0 }
+    .progress { margin: 0 }
     .scroll { overflow: scroll }
 
   </style>
@@ -30,17 +34,20 @@
 </head>
 <body ng-app="fsApp" ng-controller="EntryController">
   <div id="left-pane">
-    <div>
-      <input type="checkbox"/>"Media"
-      <input type="checkbox"/>Tumblr
-      <input type="checkbox"/>Crawling
+    <div class="btn-group">
+      <label class="btn btn-primary" ng-model="checkModel.left" btn-checkbox>"Media"</label>
+      <label class="btn btn-primary" ng-model="checkModel.middle" btn-checkbox>Tumblr</label>
+      <label class="btn btn-primary" ng-model="checkModel.right" btn-checkbox>Crawling</label>
     </div>
     <ul>
       <li ng-click="selectIndex($index)"
 	  ng-repeat="entry in entries track by $index"
 	  ng-style="($index === selectedIndex()) ? {background:'blue'} : {}">
 	<img ng-src="{{thumbUrl(entry)}}">
-	<a ng-bind="entry.title"></a>
+	<div>
+	  <a ng-bind="entry.title"></a>
+	  <progressbar ng-show="entry.false" value="entry.value"></progressbar>
+	</div>
       </li>
     </ul>
     <div>

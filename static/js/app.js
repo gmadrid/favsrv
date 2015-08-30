@@ -2,14 +2,12 @@ var angular = require('angular');
 require('angular-resource');
 require('angular-route');
 require('angular-sanitize');
-require('angular-ui-bootstrap');
 require('angular-ui-bootstrap-tpls');
 
 var app = angular.module('fsApp', ['ngResource',
 				   'ngRoute',
 				   'ngSanitize',
-				   'ui.bootstrap',
-				   'ui.bootstrap.tpls']);
+				   'ui.bootstrap']);
 
 app.config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {
     $locationProvider.html5Mode(true).hashPrefix('!');
