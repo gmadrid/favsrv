@@ -36577,7 +36577,57 @@ app.config(['$locationProvider', '$routeProvider', function($locationProvider, $
 require('./controller/index.js');
 require('./services/index.js');
 
-},{"./controller/index.js":9,"./services/index.js":11,"angular":5,"angular-resource":2,"angular-route":3,"angular-sanitize":4,"angular-ui-bootstrap-tpls":1}],8:[function(require,module,exports){
+},{"./controller/index.js":10,"./services/index.js":12,"angular":5,"angular-resource":2,"angular-route":3,"angular-sanitize":4,"angular-ui-bootstrap-tpls":1}],8:[function(require,module,exports){
+function Crawler(e, u) {
+    this.entry = e
+    e.progress = 0;
+    this.url = u;
+    this.index = 1;
+
+    var img = new Image();
+    this.img = img;
+    img.onload = function() {
+	this.loaded();
+    }.bind(this);
+    img.onerror = function() {
+	this.errored();
+    }.bind(this);
+    img.src = u;
+}
+
+Crawler.prototype.loaded = function() {
+    this.progress = 100;
+
+    // do something
+    this.entry.imageUrl = this.url.replace(/\d+\.media/, "" + (this.index - 1) + ".media");
+};
+
+Crawler.prototype.errored = function() {
+    // check for overrun.
+
+    this.progress = this.index;
+
+    var newU = this.url.replace(/\d+\.media/, "" + this.index + ".media");
+    this.index++;
+
+    this.img.src = newU;
+};
+
+
+
+
+
+
+
+
+
+
+module.exports = Crawler;
+
+},{}],9:[function(require,module,exports){
+var Crawler = require('./crawler.js');
+
+
 module.exports = ['$http', '$scope', 'Entries',
 		  function($http, $scope, Entries) {
 		      var bigRE = /_\d+\.([^.]+)$/
@@ -36651,6 +36701,12 @@ module.exports = ['$http', '$scope', 'Entries',
 			  });
 		      }
 
+		      function crawlEntry(e) {
+			  if (e.crawler) return;
+
+			  e.crawler = new Crawler(e, bigUrl(e));
+		      }
+
 		      // Instance vars
 		      $scope.selectedIndex_ = 0;
 		      $scope.entries = null;
@@ -36661,14 +36717,15 @@ module.exports = ['$http', '$scope', 'Entries',
 		      $scope.selectedEntry = selectedEntry;
 		      $scope.thumbUrl = thumbUrl;
 		      $scope.bigUrl = bigUrl;
+		      $scope.crawlEntry = crawlEntry;
 		      $scope.saveEntry = saveEntry;
 		      $scope.unsaveEntry = unsaveEntry;
 		      $scope.refresh = refresh;
-		      
+
 		      refresh();
 		  }]
 
-},{}],9:[function(require,module,exports){
+},{"./crawler.js":8}],10:[function(require,module,exports){
 var app = require('angular').module('fsApp');
 
 app.controller('EntryController', require('./entrycontroller.js'));
@@ -36676,14 +36733,14 @@ app.controller('EntryController', require('./entrycontroller.js'));
 
 
 
-},{"./entrycontroller.js":8,"angular":5}],10:[function(require,module,exports){
+},{"./entrycontroller.js":9,"angular":5}],11:[function(require,module,exports){
 module.exports = ['$resource', function($resource) { 
     return $resource('/entry');
 }];
 
-},{}],11:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 var app = require('angular').module('fsApp');
 
 app.factory('Entries', require('./entries.js'));
 
-},{"./entries.js":10,"angular":5}]},{},[7]);
+},{"./entries.js":11,"angular":5}]},{},[7]);

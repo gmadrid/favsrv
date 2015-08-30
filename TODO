@@ -1,8 +1,8 @@
 - toasts after actions take place.
+- background scope updates
 - buttons
   - skip
   - unsave should remove from list
-  - search tumblr
 - get more entries
 - Deal with your monad stack.
 - biggest/orig picker

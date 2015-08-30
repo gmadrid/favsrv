@@ -1,3 +1,6 @@
+var Crawler = require('./crawler.js');
+
+
 module.exports = ['$http', '$scope', 'Entries',
 		  function($http, $scope, Entries) {
 		      var bigRE = /_\d+\.([^.]+)$/
@@ -71,6 +74,12 @@ module.exports = ['$http', '$scope', 'Entries',
 			  });
 		      }
 
+		      function crawlEntry(e) {
+			  if (e.crawler) return;
+
+			  e.crawler = new Crawler(e, bigUrl(e));
+		      }
+
 		      // Instance vars
 		      $scope.selectedIndex_ = 0;
 		      $scope.entries = null;
@@ -81,9 +90,10 @@ module.exports = ['$http', '$scope', 'Entries',
 		      $scope.selectedEntry = selectedEntry;
 		      $scope.thumbUrl = thumbUrl;
 		      $scope.bigUrl = bigUrl;
+		      $scope.crawlEntry = crawlEntry;
 		      $scope.saveEntry = saveEntry;
 		      $scope.unsaveEntry = unsaveEntry;
 		      $scope.refresh = refresh;
-		      
+
 		      refresh();
 		  }]

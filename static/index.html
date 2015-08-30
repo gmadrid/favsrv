@@ -46,7 +46,7 @@
 	<img ng-src="{{thumbUrl(entry)}}">
 	<div>
 	  <a ng-bind="entry.title"></a>
-	  <progressbar ng-show="entry.false" value="entry.value"></progressbar>
+	  <progressbar ng-show="entry.crawler" value="entry.crawler.progress"></progressbar>
 	</div>
       </li>
     </ul>
@@ -69,7 +69,7 @@
       <button ng-click="saveEntry(selectedEntry())" class="btn">Save image</button>
       <button class="btn">Skip</button>
       <button ng-click="unsaveEntry(selectedEntry())" class="btn">Unsave entry</button>
-      <button class="btn">Search Tumblr</button>
+      <button ng-click="crawlEntry(selectedEntry())" class="btn">Search Tumblr</button>
       <button class="btn">Settings</button>
     </div>
   </div>
