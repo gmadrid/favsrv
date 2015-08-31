@@ -33,8 +33,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <base href="/">
 </head>
-<body ng-app="fsApp" ng-controller="EntryController">
-  <div id="left-pane">
+<body ng-app="fsApp" ng-controller="EntryController" ng-keydown="press($event)">
+  <div id="left-pane"  ng-keydown="press($event)">
     <div class="btn-group">
       <label class="btn btn-primary" ng-model="checkModel.left" btn-checkbox>"Media"</label>
       <label class="btn btn-primary" ng-model="checkModel.middle" btn-checkbox>Tumblr</label>
@@ -56,7 +56,7 @@
       <button ng-click="refresh()" class="btn">Refresh</button>
     </div>
   </div>
-  <div id="right-pane">
+  <div id="right-pane" ng-keydown="press($event)">
     <tabset>
       <tab heading="Image">
 	<div class="full-image">
@@ -68,10 +68,10 @@
       </tab>
     </tabset>
     <div style="flex:0 0 auto;display:flex;justify-content:center">
-      <button ng-click="saveEntry(selectedEntry())" class="btn">Save image</button>
-      <button class="btn">Skip</button>
-      <button ng-click="unsaveEntry(selectedEntry())" class="btn">Unstar entry</button>
-      <button ng-click="crawlEntry(selectedEntry())" class="btn">Search Tumblr</button>
+      <button ng-click="saveEntry(selectedEntry())" class="btn">Save image (s)</button>
+      <button class="btn">Skip (k)</button>
+      <button ng-click="unsaveEntry(selectedEntry())" class="btn">Unstar entry (U)</button>
+      <button ng-click="crawlEntry(selectedEntry())" class="btn">Search Tumblr (t)</button>
       <button class="btn">Settings</button>
     </div>
   </div>

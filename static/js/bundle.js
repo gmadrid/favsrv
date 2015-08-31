@@ -36784,6 +36784,31 @@ module.exports = ['$http', '$scope', 'Entries', 'toastr',
 			  e.crawler = new Crawler($scope, e, bigUrl(e));
 		      }
 
+		      function press($event) {
+			  console.log($event);
+			  switch($event.keyCode) {
+			  case 40: // Down
+			      selectIndex(Math.min($scope.entries.length, selectedIndex() + 1))
+			      break;
+			  case 38: // Up
+			      selectIndex(Math.max(0, selectedIndex() - 1))
+			      break;
+			  case 83: // s
+			      saveEntry(selectedEntry());
+			      break;
+			  case 75: // k
+			      break;
+			  case 85: // u
+			      if ($event.shiftKey) {
+				  unsaveEntry(selectedEntry());
+			      }
+			      break;
+			  case 84: // t
+			      crawlEntry(selectedEntry());
+			      break;
+			  }
+		      }
+
 		      // Instance vars
 		      $scope.selectedIndex_ = 0;
 		      $scope.entries = null;
@@ -36798,6 +36823,7 @@ module.exports = ['$http', '$scope', 'Entries', 'toastr',
 		      $scope.saveEntry = saveEntry;
 		      $scope.unsaveEntry = unsaveEntry;
 		      $scope.refresh = refresh;
+		      $scope.press = press;
 
 		      refresh();
 		  }]

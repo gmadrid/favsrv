@@ -3,6 +3,4 @@
   - unsave should remove from list
 - get more entries
 - Deal with your monad stack.
-- biggest/orig picker
-- Scroll with arrows
-- button shortcuts
+- fix double scrolling after clicking in the entry list.
