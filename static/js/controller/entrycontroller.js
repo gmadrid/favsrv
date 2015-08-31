@@ -77,7 +77,7 @@ module.exports = ['$http', '$scope', 'Entries',
 		      function crawlEntry(e) {
 			  if (e.crawler) return;
 
-			  e.crawler = new Crawler(e, bigUrl(e));
+			  e.crawler = new Crawler($scope, e, bigUrl(e));
 		      }
 
 		      // Instance vars

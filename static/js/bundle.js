@@ -36578,11 +36578,13 @@ require('./controller/index.js');
 require('./services/index.js');
 
 },{"./controller/index.js":10,"./services/index.js":12,"angular":5,"angular-resource":2,"angular-route":3,"angular-sanitize":4,"angular-ui-bootstrap-tpls":1}],8:[function(require,module,exports){
-function Crawler(e, u) {
+function Crawler($scope, e, u) {
+    this.$scope = $scope;
     this.entry = e
-    e.progress = 0;
+    this.progress = 0;
     this.url = u;
     this.index = 1;
+    this.success = null;
 
     var img = new Image();
     this.img = img;
@@ -36600,6 +36602,8 @@ Crawler.prototype.loaded = function() {
 
     // do something
     this.entry.imageUrl = this.url.replace(/\d+\.media/, "" + (this.index - 1) + ".media");
+    this.success = "success";
+    this.$scope.$digest();
 };
 
 Crawler.prototype.errored = function() {
@@ -36611,6 +36615,7 @@ Crawler.prototype.errored = function() {
     this.index++;
 
     this.img.src = newU;
+    this.$scope.$digest();
 };
 
 
@@ -36704,7 +36709,7 @@ module.exports = ['$http', '$scope', 'Entries',
 		      function crawlEntry(e) {
 			  if (e.crawler) return;
 
-			  e.crawler = new Crawler(e, bigUrl(e));
+			  e.crawler = new Crawler($scope, e, bigUrl(e));
 		      }
 
 		      // Instance vars

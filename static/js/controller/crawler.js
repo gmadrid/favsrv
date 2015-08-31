@@ -1,8 +1,10 @@
-function Crawler(e, u) {
+function Crawler($scope, e, u) {
+    this.$scope = $scope;
     this.entry = e
-    e.progress = 0;
+    this.progress = 0;
     this.url = u;
     this.index = 1;
+    this.success = null;
 
     var img = new Image();
     this.img = img;
@@ -20,6 +22,8 @@ Crawler.prototype.loaded = function() {
 
     // do something
     this.entry.imageUrl = this.url.replace(/\d+\.media/, "" + (this.index - 1) + ".media");
+    this.success = "success";
+    this.$scope.$digest();
 };
 
 Crawler.prototype.errored = function() {
@@ -31,6 +35,7 @@ Crawler.prototype.errored = function() {
     this.index++;
 
     this.img.src = newU;
+    this.$scope.$digest();
 };
 
 

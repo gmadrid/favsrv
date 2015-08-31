@@ -46,7 +46,8 @@
 	<img ng-src="{{thumbUrl(entry)}}">
 	<div>
 	  <a ng-bind="entry.title"></a>
-	  <progressbar ng-show="entry.crawler" value="entry.crawler.progress"></progressbar>
+	  <progressbar ng-show="entry.crawler" value="entry.crawler.progress" animate="false"
+		       type="{{entry.crawler.success}}"></progressbar>
 	</div>
       </li>
     </ul>

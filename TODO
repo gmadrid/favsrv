@@ -1,5 +1,4 @@
 - toasts after actions take place.
-- background scope updates
 - buttons
   - skip
   - unsave should remove from list
