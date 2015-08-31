@@ -275,6 +275,8 @@ routes = [
   ("static",    serveDirectory "static"),
   -- Bootstrap CSS
   ("bootstrap", serveDirectory "assets/lib/bootstrap-bower/css"),
+  -- angular-toastr
+  ("toastr",    serveDirectory "assets/lib/angular-toastr/dist"),
   -- index.html
   ("",          serveDirectory "static")
          ]

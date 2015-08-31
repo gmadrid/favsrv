@@ -1,8 +1,8 @@
 var Crawler = require('./crawler.js');
 
 
-module.exports = ['$http', '$scope', 'Entries',
-		  function($http, $scope, Entries) {
+module.exports = ['$http', '$scope', 'Entries', 'toastr',
+		  function($http, $scope, Entries, toastr) {
 		      var bigRE = /_\d+\.([^.]+)$/
 		      function bigUrl(e) {
 // return "http://7-themes.com/data_images/out/69/7009683-innocent-puppy-eyes.jpg"
@@ -29,8 +29,11 @@ module.exports = ['$http', '$scope', 'Entries',
 			      headers: {
 				  'Content-Type': 'application/x-www-form-urlencoded'
 			      }
+			  }).then(function() {
+			      toastr.success('Saved');
+			  }, function() {
+			      toastr.error('Failed to save image.');
 			  });
-			  console.log("save");
 		      }
 
 		      function unsaveEntry(e) {
@@ -48,6 +51,10 @@ module.exports = ['$http', '$scope', 'Entries',
 			      headers: {
 				  'Content-Type': 'application/x-www-form-urlencoded'
 			      }
+			  }).then(function() {
+			      toastr.success('Unstarred');
+			  }, function() {
+			      toastr.error('Failed to unstar entry.');
 			  });
 			  console.log("unsave");
 		      }
@@ -71,6 +78,7 @@ module.exports = ['$http', '$scope', 'Entries',
 			      if (data.length <= $scope.selectedIndex_) {
 				  $scope.selectIndex(data.length - 1);
 			      }
+			      toastr.success('Loaded ' + data.length + ' entries.');
 			  });
 		      }
 

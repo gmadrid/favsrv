@@ -4,10 +4,12 @@
     "description": "Favwrite as a server.",
     "browser": {
 	"angular": "./assets/lib/angular/angular-index.js",
+	"angular-animate": "./assets/lib/angular-animate/angular-animate.min.js",
 	"angular-file-upload": "./assets/lib/angular-file-upload/angular-file-upload.js",
 	"angular-resource": "./assets/lib/angular-resource/angular-resource.js",
 	"angular-route": "./assets/lib/angular-route/angular-route.js",
 	"angular-sanitize": "./assets/lib/angular-sanitize/angular-sanitize.js",
+	"angular-toastr": "./assets/lib/angular-toastr/dist/angular-toastr.tpls.min.js",
 	"angular-ui-bootstrap": "./assets/lib/angular-bootstrap/ui-bootstrap.js",
        	"angular-ui-bootstrap-tpls": "./assets/lib/angular-bootstrap/ui-bootstrap-tpls.js"
     }
